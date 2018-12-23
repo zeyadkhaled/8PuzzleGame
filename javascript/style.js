@@ -44,14 +44,13 @@ $(function () {
 
     // game functions
     var tiles = [];
-    var emptyTile;
     var img = "url(img/" + (2) + ".jpg) no-repeat";
     var num = 0;
-    for (var column = 0; column < 3; column++) {
-        for (var row = 0; row < 3; row++) {
-
-            if (column > 0) leftMargin = (column + 1) * 10; else leftMargin = 10;
-            if (row > 0) topMargin = (row + 1) * 10; else topMargin = 10;
+    var emptyTile = 0;
+    for (var row = 0; row < 3; row++) {
+        for (var column = 0; column < 3; column++) {
+            (column > 0) ? leftMargin = (column + 1) * 10 : leftMargin = 10;
+            (row > 0) ? topMargin = (row + 1) * 10 : topMargin = 10;
 
             tiles.push(
                 {
@@ -68,16 +67,13 @@ $(function () {
                 });
         }
     }
-    emptyTile = tiles[4];
-
-
 
     var createBoard = function () {
         var ul = $("ul").empty();
 
         $(tiles).each(function (index) {
             var correct = index + 1 === this.data;
-            var cssClass = (this.data === 4) ? "empty" : (correct ? "correct" : "incorrect");
+            var cssClass = (this.data === 0) ? "empty" : (correct ? "correct" : "incorrect");
 
             var li = $("<li id='" + tiles[index].data + "'>");
 
@@ -100,33 +96,50 @@ $(function () {
     }();
 
     var immovables = [];
-    var getNonimmovables = function () {
+    var getImmovables = function () {
         immovables = [];
-        for (var i = 0; i < tiles.length; i++) {
-            if (Math.abs(tiles[i].row - emptyTile.row) + Math.abs(tiles[i].col - emptyTile.col) !== 1 && tiles[i] !== emptyTile)
+       
+        for (var i = 0; i < tiles.length; i++) {    
+            if (Math.abs(tiles[i].row - tiles[emptyTile].row) + Math.abs(tiles[i].col - tiles[emptyTile].col) !== 1 && tiles[i].data !== tiles[emptyTile].data)
                 immovables.push(tiles[i]);
-
+            
+                   
         }
     };
 
-    var isMovable = function(index) {
+    var isMovable = function (index) {
         return !immovables.includes(tiles[index]);
     };
 
     var changeOpacity = function (opacity) {
         immovables.forEach(function (item, i) {
-            console.log(immovables[i].data);
             $("#" + immovables[i].data).css("opacity", opacity);
 
         });
     };
 
     $("ul").on("mouseenter", function () {
-        getNonimmovables();
+        getImmovables();
         changeOpacity(0.5);
-    }).on("mouseleave", function () {   
+      
+    }).on("mouseleave", function () {
         changeOpacity(1);
     });
 
+    $("#game ul").on('click', 'li', function () {
+        index = $(this).index();
+        shiftTiles(index);
+    });
 
+
+
+    var shiftTiles = function (pressed) {
+
+        var a = isMovable(pressed);
+
+        if (a) {
+
+        
+        }
+    };
 });
