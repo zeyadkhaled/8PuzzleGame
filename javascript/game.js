@@ -1,48 +1,4 @@
 $(function () {
-    //SLIDER
-    $("#slider > div:gt(0)").hide();
-
-    setInterval(function () {
-        $("#slider > div:first")
-            .next()
-            .fadeIn(1000)
-            .end()
-            .appendTo("#slider")
-            .hide();
-    }, 3000);
-
-    changePage = function (href) {
-        $("body").fadeOut(1000, function () {
-            window.location = href;
-        });
-    }
-
-    $(".button").click(function () {
-        var href = $(this).find("a").attr("href");
-
-        changePage(href);
-    });
-
-    //pick image
-    var imageIndex = -1;
-    $("#pics img").click(function () {
-        if (imageIndex === -1) {
-            $("#buttonHidden").addClass("button");
-        }
-
-        $(this).parent().find("img").css("box-shadow", "none");
-        $(this).css({ "box-shadow": "0 0 20px rgba(0, 0, 0, 0.5)" }, 300);
-
-        imageIndex = $(this).index();
-    });
-
-    $("#buttonHidden").click(function () {
-        var href = $(this).find("a").attr("href");
-
-        changePage(href);
-    });
-
-    // game functions
     var tiles = [];
     var img = "url(img/" + (2) + ".jpg) no-repeat";
     var num = 0;
@@ -76,20 +32,7 @@ $(function () {
 
     var createBoard = function () {
         var ul = $("ul").empty();
-
         $(tiles).each(function (index) {
-            // var correct = index + 1 === this.data;
-            // var cssClass = (this.data === 0) ? "empty" : (correct ? "correct" : "incorrect");
-
-
-
-            // if (cssClass !== "empty") {
-            //     li.css(
-            //         {
-            //             "background": img,
-            //             "background-position": (tiles[index].bleft + "px " + tiles[index].btop + "px")
-            //         });
-            // }
             var li = $("<li id='" + tiles[index].data + "'>");
             li.css(
                 {
@@ -101,8 +44,6 @@ $(function () {
                 "top": tiles[index].top + "px ",
                 "left": + tiles[index].left + "px"
             });
-
-            // li.addClass(cssClass);
             ul.append(li);
         });
     }();
@@ -110,13 +51,9 @@ $(function () {
     var immovables = [];
     var getImmovables = function () {
         immovables = [];
-        for (var i = 1; i < tiles.length; i++) {
-            // if ( i % 3 == 0)
-            //     console.log("\n");  
-            // console.log("[" + tiles[i].row + "]" + "[" + tiles[i].col + "]");
+        for (var i = 0; i < tiles.length; i++) {
             if (Math.abs(tiles[i].row - emptyTile.row) + Math.abs(tiles[i].col - emptyTile.col) !== 1)
                 immovables.push(tiles[i]);
-            console.log(tiles[emptyTile]);
         }
     };
 
@@ -131,6 +68,7 @@ $(function () {
         });
     };
 
+
     $("ul").on("mouseenter", function () {
         getImmovables();
         changeOpacity(0.5);
@@ -144,8 +82,6 @@ $(function () {
     });
 
 
-
-
     var shiftTiles = function (pressed) {
 
         var a = isMovable(pressed);
@@ -156,13 +92,7 @@ $(function () {
                 "left": emptyTile.left,
             }, 1000);
 
-            // $("#0").animate({
-            //     "top" : tiles[pressed].top,
-            //     "left" : tiles[pressed].left,                
-            // }, 1000);
 
-            console.log("Empty Tile: " + emptyTile.row + "," + emptyTile.col);
-            console.log("Pressed Tile: " + tiles[pressed].row + "," + tiles[pressed].col);
 
             var tempRow = emptyTile.row;
             var tempCol = emptyTile.col;
@@ -180,9 +110,9 @@ $(function () {
             tiles[pressed].left = tempLeft;
 
 
-            console.log("Empty Tile: " + emptyTile.row + "," + emptyTile.col);
-            console.log("Pressed Tile: " + tiles[pressed].row + "," + tiles[pressed].col);
-
+            changeOpacity(1);
+            getImmovables();
+            changeOpacity(0.5);
         }
     };
 });
